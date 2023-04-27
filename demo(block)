@@ -1,0 +1,94 @@
+//----エンティティ関連の関数 ----------------------------------------------
+function updatePosition(entity) {
+  entity.x += entity.vx;
+  entity.y += entity.vy;
+}
+
+// プレイヤーエンティティ
+
+function createPlayer() {
+  return {
+    x: 200,
+    y: 300,
+    vx: 0,
+    vy: 0
+  };
+}
+
+function applyGravity(entity) {
+  entity.vy += 0.15;
+}
+
+function applyJump(entity) {
+  entity.vy = -5;
+}
+
+function drawPlayer(entity) {
+  noStroke();
+  fill("#ffb677");
+  square(entity.x, entity.y, 40);
+}
+
+// ブロックエンティティ用
+
+function createBlock(y) {
+  return {
+    x: 900,
+    y,
+    vx: -2,
+    vy: 0
+  };
+}
+
+function drawBlock(entity){
+  rect(entity.x, entity.y,80,300)
+}
+
+
+
+//----ゲーム全体に関わる部分 ----------------------------------------------
+
+let player = {
+  x: 200, // 位置 x座標
+  y: 350, // 位置 y座標
+  vx: 0,  // 速度 x成分
+  vy: 0,   // 速度 y成分
+};//let:中身書き換えてもいい変数
+
+let block;
+
+//----setup/draw 他 ------------------------------------------------------
+
+function setup() {//←起動した一回だけ、初期設定
+  createCanvas(800, 600); // 800 x 600 ピクセル。今回このサイズでやっていきます
+  rectMode(CENTER); //四角形の基準点を中心に変更
+
+  //（ここに初期化処理が入る）
+  
+  //プレイヤーを作成
+  player = createPlayer();
+  // ブロックを作成
+  block = createBlock(300);  
+}
+
+function draw() {
+  //（ここにデータ操作処理が入る）
+
+  // プレイヤーの位置を更新
+  updatePosition(player);
+  updatePosition(block);  
+
+  // プレイヤーに重力を適用
+  applyGravity(player);
+  
+  // プレイヤーを描画：最終段階
+  background(10);//これを書かないと連続した描画になる
+  drawPlayer(player);
+  drawBlock(block);
+}
+
+function mousePressed(){
+  //（ここにマウスボタンを押したときの処理が入る）
+  // プレイヤーをジャンプさせる
+  applyJump(player);
+}
